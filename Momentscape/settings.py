@@ -29,10 +29,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*',]
 CSRF_TRUSTED_ORIGINS = ['https://momentscape.onrender.com']
-# CORS_ALLOWED_ORIGINS = [
-#     "http://127.0.0.1:8000",
-# ]
-# Application definition
 
 INSTALLED_APPS = [
     'corsheaders',
@@ -49,7 +45,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
-
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
