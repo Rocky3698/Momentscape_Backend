@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-g=0fb$g!+=84$(^x=p__+=q#dy#d&@vxi8h=#k17ad1j^b)soz
 DEBUG = True
 
 ALLOWED_HOSTS = ['*',]
-CSRF_TRUSTED_ORIGINS = ['https://momentscape.onrender.com/','http://127.0.0.1:5500']
+CSRF_TRUSTED_ORIGINS = ['https://momentscape.onrender.com/','http://*127.0.0.1']
 
 # Application definition
 
