@@ -15,6 +15,7 @@ distlib
 distro
 distro-info
 Django
+django-cors-headers
 django-crispy-forms
 django-environ
 django-filter
