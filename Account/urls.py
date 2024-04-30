@@ -5,6 +5,8 @@ router = DefaultRouter()
 
 router.register('address', views.AddressViewset)
 router.register('profile', views.ProfileViewset)
+# router.register('register', views.UserRegistrationApiView)
 urlpatterns = [
     path('', include(router.urls)),
+    path('register/',views.UserRegistrationApiView.as_view(),name='register'),
 ]
