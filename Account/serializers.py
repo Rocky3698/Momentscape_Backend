@@ -52,7 +52,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         # Create User instance
         user = User.objects.create(username=username, email=email, first_name=first_name, last_name=last_name)
         user.set_password(password)
-        # user.is_active = False
+        user.is_active = False
         user.save()
 
         # Create UserProfile instance
@@ -62,8 +62,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
         address = UserAddress.objects.create(user=user, city=city, street_address=street_address,street_number=street_number, postal_code=postal_code, country=country)
 
         return user
-
-
 
 class UserLoginSerializer(serializers.Serializer):
     username = serializers.CharField(required = True)

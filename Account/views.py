@@ -18,11 +18,24 @@ from django.shortcuts import redirect
 class ProfileViewset(viewsets.ModelViewSet):
     queryset = models.UserProfile.objects.all()
     serializer_class = serializers.ProfileSerializer
-
+    def get_queryset(self):
+        queryset = super().get_queryset() 
+        print(self.request.query_params)
+        user_id = self.request.query_params.get('user_id')
+        if user_id:
+            queryset = queryset.filter(user_id=user_id)
+        return queryset
 class AddressViewset(viewsets.ModelViewSet):
     queryset = models.UserAddress.objects.all()
     serializer_class = serializers.AddressSerializer
-
+    def get_queryset(self):
+        queryset = super().get_queryset() 
+        print(self.request.query_params)
+        user_id = self.request.query_params.get('user_id')
+        
+        if user_id:
+            queryset = queryset.filter(user_id=user_id)
+        return queryset
 
 class UserRegistrationApiView(APIView):
     serializer_class = serializers.RegistrationSerializer
@@ -32,14 +45,17 @@ class UserRegistrationApiView(APIView):
         
         if serializer.is_valid():
             user = serializer.save()
-            # token = default_token_generator.make_token(user)
-            # uid = urlsafe_base64_encode(force_bytes(user.pk))
-            # confirm_link = f"https://momentscape.onrender.com/users/active/{uid}/{token}"
-            # email_subject = "Confirm Your Email"
-            # email_body = render_to_string('confirm_email.html', {'confirm_link' : confirm_link})
-            # email = EmailMultiAlternatives(email_subject , '', to=[user.email])
-            # email.attach_alternative(email_body, "text/html")
-            # email.send()
+            print(user)
+            token = default_token_generator.make_token(user)
+            print("token ", token)
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            print("uid ", uid)
+            confirm_link = f"http://127.0.0.1:8000/account/active/{uid}/{token}"
+            email_subject = "Confirm Your Email"
+            email_body = render_to_string('confirm_email.html', {'confirm_link' : confirm_link})
+            email = EmailMultiAlternatives(email_subject , '', to=[user.email])
+            email.attach_alternative(email_body, "text/html")
+            email.send()
             return Response("Check your mail for confirmation")
         return Response(serializer.errors)
 
@@ -57,7 +73,6 @@ def activate(request, uid64, token):
         return redirect('login')
     else:
         return redirect('register')
-    
 
 class UserLoginApiView(APIView):
     def post(self, request):
@@ -65,9 +80,7 @@ class UserLoginApiView(APIView):
         if serializer.is_valid():
             username = serializer.validated_data['username']
             password = serializer.validated_data['password']
-
             user = authenticate(username= username, password=password)
-            
             if user:
                 token, _ = Token.objects.get_or_create(user=user)
                 print(token)
@@ -80,7 +93,7 @@ class UserLoginApiView(APIView):
 
 class UserLogoutView(APIView):
     def get(self, request):
-        request.user.auth_token.delete()
+        # request.user.auth_token.delete()
         logout(request)
         # return redirect('login')
         return Response({'success' : "logout successful"})
